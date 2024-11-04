@@ -196,19 +196,19 @@ Each commit message should follow this structure:
 ### Allowed Commit Types
 Here are the main type options we use, along with examples for each:
 
-`feat`: A new feature for the user.
+- `feat`: A new feature for the user.
 Example: feat: add user authentication
-`fix`: A bug fix for the user.
+- `fix`: A bug fix for the user.
 Example: fix: resolve login redirect issue
-`docs`: Documentation changes only.
+- `docs`: Documentation changes only.
 Example: docs: update README with setup instructions
-`style`: Code style changes (formatting, indentation, etc.) without affecting functionality.
+- `style`: Code style changes (formatting, indentation, etc.) without affecting functionality.
 Example: style: reformat code to meet style guidelines
-`refactor`: Code changes that improve structure or readability without fixing a bug or adding a feature.
+- `refactor`: Code changes that improve structure or readability without fixing a bug or adding a feature.
 Example: refactor: simplify authentication logic
-`test`: Adding or modifying tests.
+- `test`: Adding or modifying tests.
 Example: test: add unit tests for login component
-`chore`: Routine tasks, such as dependency updates or build process changes.
+- `chore`: Routine tasks, such as dependency updates or build process changes.
 Example: chore: update dependencies
 
 ### Examples of Valid Commit Messages
