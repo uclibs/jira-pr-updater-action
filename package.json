@@ -6,9 +6,10 @@
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watchAll",
-    "build": "ncc build src/main.js -o dist"
+    "build": "ncc build src/main.js -o dist",
+    "release": "standard-version"
   },
-  "author": "Your Name",
+  "author": "UC Libraries Dev Team",
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.10.0",
