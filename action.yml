@@ -1,0 +1,19 @@
+# Metadata for the GitHub Action.
+
+name: 'Update PR with Jira Issue'
+description: 'Automatically update PR title and body with Jira issue from branch name'
+author: 'Your Name'
+inputs:
+  jira-project-key-regex:
+    description: 'Regex pattern to match the Jira project key (e.g., [A-Za-z0-9_-]+)'
+    required: false
+    default: '[A-Za-z0-9_-]+'
+  jira-base-url:
+    description: 'Base URL of your Jira instance (e.g., https://your-domain.atlassian.net)'
+    required: true
+runs:
+  using: 'node16'
+  main: 'dist/main.js'
+branding:
+  icon: 'git-pull-request'
+  color: 'blue'
