@@ -49,6 +49,18 @@ jobs:
           paths:
             - ~/.bundle
           key: ruby-gems-{{ checksum "Gemfile.lock" }}
+
+      - run:
+          name: Debug File Paths Before Persist
+          command: |
+            echo "Checking contents of ~/shared-actions:"
+            ls -la ~/shared-actions
+            echo "Looking for package-lock.json specifically:"
+            if [ ! -f ~/shared-actions/package-lock.json ]; then
+              echo "Error: package-lock.json is missing!"
+              exit 1
+            fi
+
       - persist_to_workspace:
           root: ~/shared-actions
           paths:
