@@ -24,34 +24,23 @@ jobs:
           keys:
             - npm-dependencies-{{ checksum "package-lock.json" }}
             - npm-dependencies-
+      - restore_cache:
+          keys:
             - ruby-gems-{{ checksum "Gemfile.lock" }}
             - ruby-gems-
-      - run:
-          name: Install Node.js Dependencies
-          command: npm ci
       - save_cache:
           paths:
-           - ~/.npm
+            - ~/.npm
           key: npm-dependencies-{{ checksum "package-lock.json" }}
       - run:
           name: Install Correct Bundler Version
           command: |
             gem install bundler:"$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)"
-      - run:
-          name: Install Ruby Tools
-          command: bundle install
-
       - save_cache:
           paths:
             - ~/.bundle
           key: ruby-gems-{{ checksum "Gemfile.lock" }}
-      - run:
-          name: Debug Cache Restoration
-          command: |
-            ls -la ~/.npm || echo "No npm cache saved"
-            ls -la ~/.bundle || echo "No Ruby gems cache saved"
-            ls -la ~/shared-actions/package-lock.json || echo "No package-lock.json saved"
-            ls -la ~/shared-actions/Gemfile.lock || echo "No Gemfile.lock saved"
+
   lint:
     executor: default-executor
     steps:
@@ -65,13 +54,6 @@ jobs:
           name: Install Ruby Gems
           command: |
             bundle install
-      - run:
-          name: Debug Cache Restoration
-          command: |
-            ls -la ~/.npm || echo "No npm cache restored"
-            ls -la ~/.bundle || echo "No Ruby gems cache restored"
-            ls -la ~/shared-actions/package-lock.json || echo "No package-lock.json saved"
-            ls -la ~/shared-actions/Gemfile.lock || echo "No Gemfile.lock saved"
       - run:
           name: Run Rubocop
           command: npm run ci:lint
@@ -90,13 +72,6 @@ jobs:
           command: |
             bundle install
       - run:
-          name: Debug Cache Restoration
-          command: |
-            ls -la ~/.npm || echo "No npm cache restored"
-            ls -la ~/.bundle || echo "No Ruby gems cache restored"
-            ls -la ~/shared-actions/package-lock.json || echo "No package-lock.json saved"
-            ls -la ~/shared-actions/Gemfile.lock || echo "No Gemfile.lock saved"
-      - run:
           name: Run Security Checks
           command: npm run ci:security
 
@@ -113,25 +88,6 @@ jobs:
       - run:
           name: Install Node.js Dependencies
           command: npm ci
-      - run:
-          name: Debug Node.js Environment
-          command: |
-            echo "Node version:"
-            node --version
-            echo "npm version:"
-            npm --version
-            echo "Installed packages:"
-            ls -la node_modules/.bin
-      - run:
-          name: Debug Jest Installation
-          command: |
-            if [ -f node_modules/.bin/jest ]; then
-              echo "Jest is installed!"
-            else
-              echo "Jest is not installed!"
-              ls -la node_modules/.bin || echo "node_modules/.bin directory not found"
-            fi
-
       - run:
           name: Run Tests
           command: npm run ci:test

@@ -5,7 +5,7 @@
   "main": "src/main.js",
   "scripts": {
     "lint": "rubocop --fail-level E",
-    "security:brakeman": "brakeman -z",
+    "security:brakeman": "brakeman -z --force",
     "security:bundler-audit": "bundle-audit check --update",
     "test": "jest",
     "test:watch": "jest --watchAll",
