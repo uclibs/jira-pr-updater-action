@@ -24,19 +24,20 @@ jobs:
           keys:
             - npm-dependencies-{{ checksum "package-lock.json" }}
             - npm-dependencies-
-      - restore_cache:
-          keys:
             - ruby-gems-{{ checksum "Gemfile.lock" }}
             - ruby-gems-
+      - run:
+          name: Debug Cache Restoration
+          command: |
+            ls -la ~/.npm || echo "No npm cache restored"
+            ls -la ~/.bundle || echo "No Ruby gems cache restored"
       - run:
           name: Install Node.js Dependencies
           command: npm ci
       - run:
-          name: Configure Bundler
+          name: Install Correct Bundler Version
           command: |
-           echo 'export BUNDLER_VERSION=$(cat Gemfile.lock | tail -1 | tr -d " ")' >> $BASH_ENV
-           source $BASH_ENV
-           gem install bundler -v "$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)"
+            gem install bundler:"$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)"
       - run:
           name: Install Ruby Tools
           command: bundle install
@@ -48,6 +49,13 @@ jobs:
           paths:
             - ~/.bundle
           key: ruby-gems-{{ checksum "Gemfile.lock" }}
+      - persist_to_workspace:
+          root: ~/shared-actions
+          paths:
+            - .
+            - ~/.bundle
+            - ~/.npm
+            - package-lock.json
 
   lint:
     executor: default-executor
