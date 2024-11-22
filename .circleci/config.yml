@@ -10,7 +10,20 @@ jobs:
   setup:
     executor: default-executor
     steps:
-      - checkout
+      - run:
+          name: Verify Node.js and Ruby Versions
+          command: |
+            node --version
+            ruby --version
+      - run:
+          name: Debug Before Checkout
+          command:
+            echo "Debug: Starting setup job"
+      - checkout:
+          path: ~/shared-actions
+      - run:
+          name: Debug After Checkout
+          command: ls -la
       - restore_cache:
           keys:
             - npm-dependencies-{{ checksum "package-lock.json" }}
