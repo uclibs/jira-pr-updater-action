@@ -3,7 +3,7 @@ version: 2.1
 executors:
   default-executor:
     docker:
-      - image: cimg/node:20.8.0 # Node.js environment for your shared action
+      - image: circleci/ruby:3.2-node
     working_directory: ~/shared-actions
 
 jobs:
