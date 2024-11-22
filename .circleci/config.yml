@@ -3,7 +3,7 @@ version: 2.1
 executors:
   default-executor:
     docker:
-      - image: cimg/ruby:3.3.3
+      - image: cimg/ruby:3.3.3-node
     working_directory: ~/shared-actions
 
   docker-publisher:
@@ -36,8 +36,14 @@ jobs:
           name: Install Node.js Dependencies
           command: npm ci
       - run:
+          name: Configure Bundler
+          command: |
+           echo 'export BUNDLER_VERSION=$(cat Gemfile.lock | tail -1 | tr -d " ")' >> $BASH_ENV
+           source $BASH_ENV
+           gem install bundler -v "$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)"
+      - run:
           name: Install Ruby Tools
-          command: gem install rubocop brakeman bundler-audit
+          command: bundle install
       - save_cache:
           paths:
             - ~/.npm
