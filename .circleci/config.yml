@@ -61,13 +61,13 @@ jobs:
               exit 1
             fi
 
-      - persist_to_workspace:
-          root: ~/shared-actions
-          paths:
-            - .
-            - ~/.bundle
-            - ~/.npm
-            - package-lock.json
+#      - persist_to_workspace:
+#          root: ~/shared-actions
+#          paths:
+#            - .
+#            - ~/.bundle
+#            - ~/.npm
+#            - package-lock.json
 
   lint:
     executor: default-executor
