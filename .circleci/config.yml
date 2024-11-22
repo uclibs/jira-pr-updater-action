@@ -1,13 +1,27 @@
 version: 2.1
+
 executors:
   default-executor:
     docker:
-      - image: cimg/node:20.8.0 # Node.js environment for your shared action
+      - image: cimg/ruby:3.3.3
     working_directory: ~/shared-actions
+
+  docker-publisher:
+    environment:
+      IMAGE_NAME: jira-pr-updater-action
+    docker:
+      - image: docker:20.10.14-git
+
+orbs:
+  ruby: circleci/ruby@2.1.1
 
 jobs:
   setup:
     executor: default-executor
+    docker:
+      - image: cimg/ruby:3.3.3
+    working_directory: ~/shared-actions
+
     steps:
       - checkout
       - restore_cache:
