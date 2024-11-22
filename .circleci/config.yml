@@ -3,7 +3,7 @@ version: 2.1
 executors:
   default-executor:
     docker:
-      - image: cimg/ruby:3.3.3-node
+      - image: cimg/ruby:3.3.6-node
     working_directory: ~/shared-actions
 
   docker-publisher:
@@ -18,10 +18,6 @@ orbs:
 jobs:
   setup:
     executor: default-executor
-    docker:
-      - image: cimg/ruby:3.3.3
-    working_directory: ~/shared-actions
-
     steps:
       - checkout
       - restore_cache:
