@@ -27,11 +27,6 @@ jobs:
             - ruby-gems-{{ checksum "Gemfile.lock" }}
             - ruby-gems-
       - run:
-          name: Debug Cache Restoration
-          command: |
-            ls -la ~/.npm || echo "No npm cache restored"
-            ls -la ~/.bundle || echo "No Ruby gems cache restored"
-      - run:
           name: Install Node.js Dependencies
           command: npm ci
       - run:
@@ -49,7 +44,11 @@ jobs:
           paths:
             - ~/.bundle
           key: ruby-gems-{{ checksum "Gemfile.lock" }}
-
+      - run:
+          name: Debug Cache Restoration
+          command: |
+            ls -la ~/.npm || echo "No npm cache saved"
+            ls -la ~/.bundle || echo "No Ruby gems cache saved"
   lint:
     executor: default-executor
     steps:
