@@ -53,11 +53,9 @@ jobs:
           keys:
             - ruby-gems-{{ checksum "Gemfile.lock" }}
       - run:
-          name: Run Brakeman
-          command: npm run security:brakeman
-      - run:
-          name: Run Bundler-audit
-          command: npm run security:bundler-audit
+          name: Run Security Checks
+          command: npm run ci:security
+
 
   test:
     executor: default-executor
