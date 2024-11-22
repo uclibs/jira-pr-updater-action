@@ -92,6 +92,7 @@ jobs:
   test:
     executor: default-executor
     steps:
+      - checkout
       - attach_workspace:
           at: ~/shared-actions
       - restore_cache:
