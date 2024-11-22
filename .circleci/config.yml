@@ -54,11 +54,12 @@ jobs:
   lint:
     executor: default-executor
     steps:
+      - checkout
       - attach_workspace:
           at: ~/shared-actions
       - restore_cache:
           keys:
-            - ruby-gems-{{ checksum "shared-actions/Gemfile.lock" }}
+            - ruby-gems-{{ checksum "Gemfile.lock" }}
       - run:
           name: Debug Cache Restoration
           command: |
@@ -73,11 +74,12 @@ jobs:
   security:
     executor: default-executor
     steps:
+      - checkout
       - attach_workspace:
           at: ~/shared-actions
       - restore_cache:
           keys:
-            - ruby-gems-{{ checksum "shared-actions/Gemfile.lock" }}
+            - ruby-gems-{{ checksum "Gemfile.lock" }}
       - run:
           name: Debug Cache Restoration
           command: |
@@ -108,7 +110,7 @@ jobs:
             ls -la ~/shared-actions/Gemfile.lock || echo "No Gemfile.lock saved"
       - run:
           name: Run Tests
-          command: ci:test
+          command: npm run ci:test
 
 workflows:
   version: 2
