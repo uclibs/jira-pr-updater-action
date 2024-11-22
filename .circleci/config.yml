@@ -1,0 +1,87 @@
+version: 2.1
+
+executors:
+  default-executor:
+    docker:
+      - image: cimg/node:20.8.0 # Node.js environment for your shared action
+    working_directory: ~/shared-actions
+
+jobs:
+  setup:
+    executor: default-executor
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - npm-dependencies-{{ checksum "package-lock.json" }}
+            - npm-dependencies-
+      - restore_cache:
+          keys:
+            - ruby-gems-{{ checksum "Gemfile.lock" }}
+            - ruby-gems-
+      - run:
+          name: Install Node.js Dependencies
+          command: npm ci
+      - run:
+          name: Install Ruby Tools
+          command: gem install rubocop brakeman bundler-audit
+      - save_cache:
+          paths:
+            - ~/.npm
+          key: npm-dependencies-{{ checksum "package-lock.json" }}
+      - save_cache:
+          paths:
+            - ~/.bundle
+          key: ruby-gems-{{ checksum "Gemfile.lock" }}
+
+  lint:
+    executor: default-executor
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - ruby-gems-{{ checksum "Gemfile.lock" }}
+      - run:
+          name: Run Rubocop
+          command: npm run ci:lint
+
+  security:
+    executor: default-executor
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - ruby-gems-{{ checksum "Gemfile.lock" }}
+      - run:
+          name: Run Brakeman
+          command: npm run security:brakeman
+      - run:
+          name: Run Bundler-audit
+          command: npm run security:bundler-audit
+
+  test:
+    executor: default-executor
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - npm-dependencies-{{ checksum "package-lock.json" }}
+            - npm-dependencies-
+      - run:
+          name: Run Tests
+          command: npm test
+
+workflows:
+  version: 2
+  ci:
+    jobs:
+      - setup
+      - lint:
+          requires:
+            - setup
+      - security:
+          requires:
+            - setup
+      - test:
+          requires:
+            - setup
