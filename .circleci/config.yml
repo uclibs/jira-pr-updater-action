@@ -3,7 +3,7 @@ version: 2.1
 executors:
   default-executor:
     docker:
-      - image: circleci/ruby:3.2-node
+      - image: cimg/ruby:3.2-node
     working_directory: ~/shared-actions
 
 jobs:
@@ -23,8 +23,8 @@ jobs:
           name: Install Node.js Dependencies
           command: npm ci
       - run:
-          name: Install Ruby Tools
-          command: gem install rubocop brakeman bundler-audit
+          name: Install Ruby Gems
+          command: bundle install
       - save_cache:
           paths:
             - ~/.npm
