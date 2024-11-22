@@ -1,28 +1,15 @@
 version: 2.1
-
 executors:
   default-executor:
     docker:
-      - image: cimg/ruby:3.2-node
+      - image: cimg/node:20.8.0 # Node.js environment for your shared action
     working_directory: ~/shared-actions
 
 jobs:
   setup:
     executor: default-executor
     steps:
-      - run:
-          name: Verify Node.js and Ruby Versions
-          command: |
-            node --version
-            ruby --version
-      - run:
-          name: Debug Before Checkout
-          command: echo "Debug... Starting setup job"
-      - checkout:
-          path: ~/shared-actions
-      - run:
-          name: Debug After Checkout
-          command: ls -la
+      - checkout
       - restore_cache:
           keys:
             - npm-dependencies-{{ checksum "package-lock.json" }}
@@ -35,8 +22,8 @@ jobs:
           name: Install Node.js Dependencies
           command: npm ci
       - run:
-          name: Install Ruby Gems
-          command: bundle install --path ~/.bundle
+          name: Install Ruby Tools
+          command: gem install rubocop brakeman bundler-audit
       - save_cache:
           paths:
             - ~/.npm
@@ -45,30 +32,21 @@ jobs:
           paths:
             - ~/.bundle
           key: ruby-gems-{{ checksum "Gemfile.lock" }}
-      - persist_to_workspace:
-          root: ~/shared-actions
-          paths:
-            - .
-            - ~/.bundle
-            - ~/.npm
 
   lint:
     executor: default-executor
     steps:
-      - attach_workspace:
-          at: ~/shared-actions
+      - checkout
       - restore_cache:
           keys:
             - ruby-gems-{{ checksum "Gemfile.lock" }}
       - run:
           name: Run Rubocop
           command: npm run ci:lint
-
   security:
     executor: default-executor
     steps:
-      - attach_workspace:
-          at: ~/shared-actions
+      - checkout
       - restore_cache:
           keys:
             - ruby-gems-{{ checksum "Gemfile.lock" }}
@@ -76,11 +54,11 @@ jobs:
           name: Run Security Checks
           command: npm run ci:security
 
+
   test:
     executor: default-executor
     steps:
-      - attach_workspace:
-          at: ~/shared-actions
+      - checkout
       - restore_cache:
           keys:
             - npm-dependencies-{{ checksum "package-lock.json" }}
@@ -88,7 +66,6 @@ jobs:
       - run:
           name: Run Tests
           command: npm test
-
 workflows:
   version: 2
   ci:
