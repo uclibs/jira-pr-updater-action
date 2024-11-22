@@ -96,7 +96,7 @@ jobs:
           at: ~/shared-actions
       - restore_cache:
           keys:
-            - npm-dependencies-{{ checksum "shared-actions/package-lock.json" }}
+            - npm-dependencies-{{ checksum "package-lock.json" }}
             - npm-dependencies-
       - run:
           name: Debug Cache Restoration
