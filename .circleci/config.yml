@@ -50,31 +50,6 @@ jobs:
             - ~/.bundle
           key: ruby-gems-{{ checksum "Gemfile.lock" }}
 
-      - run:
-          name: Debug Cache Keys
-          command: |
-            echo "Cache keys:"
-            echo "npm-dependencies-$(checksum 'package-lock.json')"
-            echo "ruby-gems-$(checksum 'Gemfile.lock')"
-
-      - run:
-          name: Debug File Paths Before Persist
-          command: |
-            echo "Checking contents of ~/shared-actions:"
-            ls -la ~/shared-actions
-            echo "Looking for package-lock.json specifically:"
-            if [ ! -f ~/shared-actions/package-lock.json ]; then
-              echo "Error: package-lock.json is missing!"
-              exit 1
-            fi
-#
-#      - persist_to_workspace:
-#          root: ~/shared-actions
-#          paths:
-#            - ~/.bundle
-#            - ~/.npm
-#            - package-lock.json
-
   lint:
     executor: default-executor
     steps:
@@ -83,6 +58,11 @@ jobs:
       - restore_cache:
           keys:
             - ruby-gems-{{ checksum "Gemfile.lock" }}
+      - run:
+          name: Debug Cache Restoration
+          command: |
+            ls -la ~/.npm || echo "No npm cache restored"
+            ls -la ~/.bundle || echo "No Ruby gems cache restored"
       - run:
           name: Run Rubocop
           command: npm run ci:lint
@@ -95,6 +75,11 @@ jobs:
       - restore_cache:
           keys:
             - ruby-gems-{{ checksum "Gemfile.lock" }}
+      - run:
+          name: Debug Cache Restoration
+          command: |
+            ls -la ~/.npm || echo "No npm cache restored"
+            ls -la ~/.bundle || echo "No Ruby gems cache restored"
       - run:
           name: Run Security Checks
           command: npm run ci:security
@@ -109,11 +94,13 @@ jobs:
             - npm-dependencies-{{ checksum "package-lock.json" }}
             - npm-dependencies-
       - run:
-          name: Install Node.js Dependencies
-          command: npm ci
+          name: Debug Cache Restoration
+          command: |
+            ls -la ~/.npm || echo "No npm cache restored"
+            ls -la ~/.bundle || echo "No Ruby gems cache restored"
       - run:
           name: Run Tests
-          command: npm test
+          command: ci:test
 
 workflows:
   version: 2
