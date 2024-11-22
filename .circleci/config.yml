@@ -109,6 +109,25 @@ jobs:
             ls -la ~/shared-actions/package-lock.json || echo "No package-lock.json saved"
             ls -la ~/shared-actions/Gemfile.lock || echo "No Gemfile.lock saved"
       - run:
+          name: Debug Node.js Environment
+          command: |
+            echo "Node version:"
+            node --version
+            echo "npm version:"
+            npm --version
+            echo "Installed packages:"
+            ls -la node_modules/.bin
+      - run:
+          name: Debug Jest Installation
+          command: |
+            if [ -f node_modules/.bin/jest ]; then
+              echo "Jest is installed!"
+            else
+              echo "Jest is not installed!"
+              ls -la node_modules/.bin || echo "node_modules/.bin directory not found"
+            fi
+
+      - run:
           name: Run Tests
           command: npm run ci:test
 
