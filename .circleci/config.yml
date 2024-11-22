@@ -3,20 +3,14 @@ version: 2.1
 executors:
   default-executor:
     docker:
-      - image: cimg/ruby:3.3.3-node
+      - image: cimg/ruby:3.2-node
     working_directory: ~/shared-actions
-    environment:
-      PATH: ~/.bundle/bin:$PATH  # Add bundled gems to PATH
-
-orbs:
-  ruby: circleci/ruby@2.1.1
 
 jobs:
   setup:
     executor: default-executor
     steps:
-      - checkout:
-          scm: git
+      - checkout
       - restore_cache:
           keys:
             - npm-dependencies-{{ checksum "package-lock.json" }}
@@ -30,7 +24,7 @@ jobs:
           command: npm ci
       - run:
           name: Install Ruby Gems
-          command: bundle install --path ~/.bundle  # Install gems to a custom path
+          command: bundle install --path ~/.bundle
       - save_cache:
           paths:
             - ~/.npm
@@ -39,12 +33,18 @@ jobs:
           paths:
             - ~/.bundle
           key: ruby-gems-{{ checksum "Gemfile.lock" }}
+      - persist_to_workspace:
+          root: ~/shared-actions
+          paths:
+            - .
+            - ~/.bundle
+            - ~/.npm
 
   lint:
     executor: default-executor
     steps:
-      - checkout:
-          scm: git
+      - attach_workspace:
+          at: ~/shared-actions
       - restore_cache:
           keys:
             - ruby-gems-{{ checksum "Gemfile.lock" }}
@@ -55,8 +55,8 @@ jobs:
   security:
     executor: default-executor
     steps:
-      - checkout:
-          scm: git
+      - attach_workspace:
+          at: ~/shared-actions
       - restore_cache:
           keys:
             - ruby-gems-{{ checksum "Gemfile.lock" }}
@@ -67,8 +67,8 @@ jobs:
   test:
     executor: default-executor
     steps:
-      - checkout:
-          scm: git
+      - attach_workspace:
+          at: ~/shared-actions
       - restore_cache:
           keys:
             - npm-dependencies-{{ checksum "package-lock.json" }}
