@@ -49,6 +49,8 @@ jobs:
           command: |
             ls -la ~/.npm || echo "No npm cache saved"
             ls -la ~/.bundle || echo "No Ruby gems cache saved"
+            ls -la ~/shared-actions/package-lock.json || echo "No package-lock.json saved"
+            ls -la ~/shared-actions/Gemfile.lock || echo "No Gemfile.lock saved"
   lint:
     executor: default-executor
     steps:
@@ -56,12 +58,14 @@ jobs:
           at: ~/shared-actions
       - restore_cache:
           keys:
-            - ruby-gems-{{ checksum "Gemfile.lock" }}
+            - ruby-gems-{{ checksum "shared-actions/Gemfile.lock" }}
       - run:
           name: Debug Cache Restoration
           command: |
             ls -la ~/.npm || echo "No npm cache restored"
             ls -la ~/.bundle || echo "No Ruby gems cache restored"
+            ls -la ~/shared-actions/package-lock.json || echo "No package-lock.json saved"
+            ls -la ~/shared-actions/Gemfile.lock || echo "No Gemfile.lock saved"
       - run:
           name: Run Rubocop
           command: npm run ci:lint
@@ -73,12 +77,14 @@ jobs:
           at: ~/shared-actions
       - restore_cache:
           keys:
-            - ruby-gems-{{ checksum "Gemfile.lock" }}
+            - ruby-gems-{{ checksum "shared-actions/Gemfile.lock" }}
       - run:
           name: Debug Cache Restoration
           command: |
             ls -la ~/.npm || echo "No npm cache restored"
             ls -la ~/.bundle || echo "No Ruby gems cache restored"
+            ls -la ~/shared-actions/package-lock.json || echo "No package-lock.json saved"
+            ls -la ~/shared-actions/Gemfile.lock || echo "No Gemfile.lock saved"
       - run:
           name: Run Security Checks
           command: npm run ci:security
@@ -90,13 +96,15 @@ jobs:
           at: ~/shared-actions
       - restore_cache:
           keys:
-            - npm-dependencies-{{ checksum "package-lock.json" }}
+            - npm-dependencies-{{ checksum "shared-actions/package-lock.json" }}
             - npm-dependencies-
       - run:
           name: Debug Cache Restoration
           command: |
             ls -la ~/.npm || echo "No npm cache restored"
             ls -la ~/.bundle || echo "No Ruby gems cache restored"
+            ls -la ~/shared-actions/package-lock.json || echo "No package-lock.json saved"
+            ls -la ~/shared-actions/Gemfile.lock || echo "No Gemfile.lock saved"
       - run:
           name: Run Tests
           command: ci:test
