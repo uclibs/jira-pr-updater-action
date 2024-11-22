@@ -4,10 +4,16 @@
   "description": "GitHub Action to update PR title and body with Jira issue from branch name",
   "main": "src/main.js",
   "scripts": {
+    "lint": "rubocop --fail-level E",
+    "security:brakeman": "brakeman -z",
+    "security:bundler-audit": "bundle-audit check --update",
     "test": "jest",
     "test:watch": "jest --watchAll",
     "build": "ncc build src/main.js -o dist",
-    "release": "semantic-release"
+    "release": "semantic-release",
+    "ci:security": "npm run security:brakeman && npm run security:bundler-audit",
+    "ci:lint": "npm run lint",
+    "ci:test": "npm test"
   },
   "author": "UC Libraries Dev Team",
   "license": "MIT",
