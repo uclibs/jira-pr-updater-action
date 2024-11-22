@@ -3,21 +3,20 @@ version: 2.1
 executors:
   default-executor:
     docker:
-      - image: cimg/ruby:3.2-node
+      - image: cimg/ruby:3.3.3-node
     working_directory: ~/shared-actions
     environment:
       PATH: ~/.bundle/bin:$PATH  # Add bundled gems to PATH
+
+orbs:
+  ruby: circleci/ruby@2.1.1
 
 jobs:
   setup:
     executor: default-executor
     steps:
-      - checkout
-      - run:
-          name: Install SSH
-          command: |
-            sudo apt-get update
-            sudo apt-get install -y openssh-client
+      - checkout:
+          scm: git
       - restore_cache:
           keys:
             - npm-dependencies-{{ checksum "package-lock.json" }}
@@ -44,7 +43,8 @@ jobs:
   lint:
     executor: default-executor
     steps:
-      - checkout
+      - checkout:
+          scm: git
       - restore_cache:
           keys:
             - ruby-gems-{{ checksum "Gemfile.lock" }}
@@ -55,7 +55,8 @@ jobs:
   security:
     executor: default-executor
     steps:
-      - checkout
+      - checkout:
+          scm: git
       - restore_cache:
           keys:
             - ruby-gems-{{ checksum "Gemfile.lock" }}
@@ -66,7 +67,8 @@ jobs:
   test:
     executor: default-executor
     steps:
-      - checkout
+      - checkout:
+          scm: git
       - restore_cache:
           keys:
             - npm-dependencies-{{ checksum "package-lock.json" }}
