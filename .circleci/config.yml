@@ -52,17 +52,20 @@ jobs:
   lint:
     executor: default-executor
     steps:
-      - checkout
+      - attach_workspace:
+          at: ~/shared-actions
       - restore_cache:
           keys:
             - ruby-gems-{{ checksum "Gemfile.lock" }}
       - run:
           name: Run Rubocop
           command: npm run ci:lint
+
   security:
     executor: default-executor
     steps:
-      - checkout
+      - attach_workspace:
+          at: ~/shared-actions
       - restore_cache:
           keys:
             - ruby-gems-{{ checksum "Gemfile.lock" }}
@@ -70,18 +73,22 @@ jobs:
           name: Run Security Checks
           command: npm run ci:security
 
-
   test:
     executor: default-executor
     steps:
-      - checkout
+      - attach_workspace:
+          at: ~/shared-actions
       - restore_cache:
           keys:
             - npm-dependencies-{{ checksum "package-lock.json" }}
             - npm-dependencies-
       - run:
+          name: Install Node.js Dependencies
+          command: npm ci
+      - run:
           name: Run Tests
           command: npm test
+
 workflows:
   version: 2
   ci:
