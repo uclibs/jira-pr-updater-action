@@ -17,8 +17,7 @@ jobs:
             ruby --version
       - run:
           name: Debug Before Checkout
-          command:
-            echo "Debug: Starting setup job"
+          command: echo "Debug... Starting setup job"
       - checkout:
           path: ~/shared-actions
       - run:
