@@ -61,6 +61,20 @@ with:
   jira-base-url: 'https://ucdts.atlassian.net'
   jira-project-key-regex: '[A-Z]{2,5}'
 ```
+## Troubleshooting
+### Action Doesn't Seem to Run
+- Check Workflow Triggers: Ensure the on: section in your workflow file includes the pull_request event.
+- Verify Workflow File Location: The workflow file must be located in .github/workflows/.
+- GitHub Actions Enabled: Confirm that GitHub Actions are enabled for your repository.
+### Jira Issue Not Detected
+- Branch Naming Convention: Make sure your branch names include the Jira issue number.
+- Issue Regex: If you have a custom branch naming convention, adjust the issue_regex input accordingly.
+### Permission Issues
+- GITHUB_TOKEN: Ensure that the GITHUB_TOKEN is correctly referenced and has the necessary permissions.
+- Repository Permissions: Verify that you have write access to the repository.
+### Still Having Problems?
+- Check Action Logs: Go to the "Actions" tab in your repository to view logs and error messages.
+- Contact Support: Reach out to your internal support team or the action maintainer.
 
 ## Contributing
 Contributions are welcome! Please open an issue or pull request for any bugs or enhancements.
@@ -69,7 +83,7 @@ Before making a contribution please see our [Contributing Guidelines](CONTRIBUTI
 
 
 ## Code of Conduct
-Please read our Code of Conduct before contributing.
+Please read our [Code of Conduct](CODE_OF_CONDUCT.md) before contributing.
 
 ## License
 This project is licensed under the terms of the MIT license. See [the LICENSE file](LICENSE.md) for details.
