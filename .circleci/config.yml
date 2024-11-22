@@ -13,6 +13,11 @@ jobs:
     executor: default-executor
     steps:
       - checkout
+      - run:
+          name: Install SSH
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y openssh-client
       - restore_cache:
           keys:
             - npm-dependencies-{{ checksum "package-lock.json" }}
