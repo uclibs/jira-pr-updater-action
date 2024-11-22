@@ -7,7 +7,7 @@
     "test": "jest",
     "test:watch": "jest --watchAll",
     "build": "ncc build src/main.js -o dist",
-    "release": "standard-version"
+    "release": "semantic-release"
   },
   "author": "UC Libraries Dev Team",
   "license": "MIT",
