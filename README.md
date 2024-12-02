@@ -1,5 +1,5 @@
 # Update PR with Jira Issue
-[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](code_of_conduct.md)
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CODE_OF_CONDUCT.md)
 
 A GitHub Action to automatically update pull request titles and bodies with the Jira issue key and link extracted from the branch name.
 
