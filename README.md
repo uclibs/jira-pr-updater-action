@@ -26,9 +26,14 @@ To use this action in your workflow, add the following to your workflow YAML fil
 
 ```yaml
 name: Update PR with Jira Issue
+
 on:
-  pull_request:
-    types: [opened, edited, synchronize, reopened]
+  pull_request_target:
+    types: [ opened, edited, synchronize, reopened ]
+
+permissions:
+  pull-requests: write   # allow updating titles, labels, etc.
+  contents:       read    # we don’t need to write repo contents here
 
 jobs:
   update-pr:
